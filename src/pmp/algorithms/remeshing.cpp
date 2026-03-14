@@ -18,7 +18,6 @@
 #include "pmp/bounding_box.h"
 
 namespace pmp {
-namespace {
 
 class TriangleKdTree
 {
@@ -247,70 +246,7 @@ void TriangleKdTree::nearest_recurse(Node* node, const Point& point,
     }
 }
 
-class Remeshing
-{
-public:
-    Remeshing(SurfaceMesh& mesh);
-
-    void uniform_remeshing(Scalar edge_length, unsigned int iterations = 10,
-                           bool use_projection = true);
-
-    void adaptive_remeshing(Scalar min_edge_length, Scalar max_edge_length,
-                            Scalar approx_error, unsigned int iterations = 10,
-                            bool use_projection = true);
-
-private:
-    void preprocessing();
-    void postprocessing();
-
-    void split_long_edges();
-    void collapse_short_edges();
-    void flip_edges();
-    void tangential_smoothing(unsigned int iterations);
-    void remove_caps();
-
-    Point minimize_squared_areas(Vertex v);
-    Point weighted_centroid(Vertex v);
-
-    void project_to_reference(Vertex v);
-
-    bool is_too_long(Vertex v0, Vertex v1) const
-    {
-        return distance(points_[v0], points_[v1]) >
-               4.0 / 3.0 * std::min(vsizing_[v0], vsizing_[v1]);
-    }
-    bool is_too_short(Vertex v0, Vertex v1) const
-    {
-        return distance(points_[v0], points_[v1]) <
-               4.0 / 5.0 * std::min(vsizing_[v0], vsizing_[v1]);
-    }
-
-    SurfaceMesh& mesh_;
-    std::shared_ptr<SurfaceMesh> refmesh_;
-
-    bool use_projection_;
-    std::unique_ptr<TriangleKdTree> kd_tree_;
-
-    bool uniform_;
-    Scalar target_edge_length_;
-    Scalar min_edge_length_;
-    Scalar max_edge_length_;
-    Scalar approx_error_;
-
-    bool has_feature_vertices_{false};
-    bool has_feature_edges_{false};
-    VertexProperty<Point> points_;
-    VertexProperty<Point> vnormal_;
-    VertexProperty<bool> vfeature_;
-    EdgeProperty<bool> efeature_;
-    VertexProperty<bool> vlocked_;
-    EdgeProperty<bool> elocked_;
-    VertexProperty<Scalar> vsizing_;
-
-    VertexProperty<Point> refpoints_;
-    VertexProperty<Point> refnormals_;
-    VertexProperty<Scalar> refsizing_;
-};
+// Class definition is now in remeshing.h
 
 Remeshing::Remeshing(SurfaceMesh& mesh)
     : mesh_(mesh), refmesh_(nullptr), kd_tree_(nullptr)
@@ -1175,7 +1111,24 @@ Point Remeshing::weighted_centroid(Vertex v)
 
     return p;
 }
-} // namespace
+Remeshing::~Remeshing() = default;
+
+void Remeshing::set_uniform(Scalar edge_length, bool use_projection)
+{
+    uniform_ = true;
+    target_edge_length_ = edge_length;
+    use_projection_ = use_projection;
+}
+
+void Remeshing::set_adaptive(Scalar min_edge_length, Scalar max_edge_length,
+                              Scalar approx_error, bool use_projection)
+{
+    uniform_ = false;
+    min_edge_length_ = min_edge_length;
+    max_edge_length_ = max_edge_length;
+    approx_error_ = approx_error;
+    use_projection_ = use_projection;
+}
 
 void uniform_remeshing(SurfaceMesh& mesh, Scalar edge_length,
                        unsigned int iterations, bool use_projection)

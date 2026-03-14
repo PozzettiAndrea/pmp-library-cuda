@@ -1,0 +1,1 @@
+-I"/home/shadeform/cudageom/pmp-library-cuda/src" -I"/home/shadeform/cudageom/pmp-library-cuda/src/pmp/.." -I"/home/shadeform/cudageom/pmp-library-cuda/src/pmp/algorithms/cuda" -isystem "/home/shadeform/cudageom/pmp-library-cuda/external/eigen-3.4.0" -isystem "/usr/local/cuda-13/targets/x86_64-linux/include" -isystem "/usr/local/cuda-13/targets/x86_64-linux/include/cccl"

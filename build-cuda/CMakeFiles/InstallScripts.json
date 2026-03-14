@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/shadeform/cudageom/pmp-library-cuda/build-cuda/cmake_install.cmake",
+		"/home/shadeform/cudageom/pmp-library-cuda/build-cuda/src/pmp/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

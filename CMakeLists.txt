@@ -14,7 +14,14 @@ option(PMP_BUILD_VIEWERS "Build the PMP viewers" ON)
 option(PMP_INSTALL "Install the PMP library and headers" ON)
 option(PMP_STRICT_COMPILATION "Treat compiler warnings as errors" ON)
 option(PMP_BUILD_REGRESSIONS "Build the PMP regression test programs" OFF)
+option(PMP_BUILD_CUDA "Build with CUDA acceleration for remeshing" OFF)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
+
+if(PMP_BUILD_CUDA)
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+  message(STATUS "CUDA enabled: ${CMAKE_CUDA_COMPILER_VERSION}")
+endif()
 
 # set output paths
 set(PROJECT_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})

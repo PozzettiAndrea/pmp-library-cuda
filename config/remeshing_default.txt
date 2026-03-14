@@ -1,0 +1,21 @@
+# PMP CUDA Remeshing Configuration — All CPU (baseline)
+# Strategy per operation: cpu or cuda
+split_strategy cpu
+collapse_strategy cpu
+flip_strategy cpu
+smooth_strategy cpu
+
+# Iteration counts
+outer_iterations 10
+split_passes 10
+flip_passes 10
+smooth_sub_iterations 5
+
+# CUDA tuning (unused when all CPU)
+cuda_block_size 256
+gpu_capacity_multiplier 4
+bvh_max_leaf_size 8
+
+# Checkpoint settings
+checkpoint_enabled 0
+checkpoint_save_all 0
